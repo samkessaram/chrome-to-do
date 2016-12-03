@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <title>To-Do with Vue</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Hello! Let's code!</h1>
+
+<div class="container" id="todo">
+  <section class="panel">
+    <input id="mark-all" type="checkbox" v-bind:checked="areAllSelected" v-on:click="selectAll">
+    <input type="text" placeholder="What do you need to do?" class="text-input" autofocus autofocus v-model="newTask" v-on:keyup.enter="addTask">
+    <button v-on:click="clearList">Clear List</button>
+    
+  </section>
+
+  <ul class="list">
+    <li v-for="task in taskList" v-bind:class="{done: task.checked}" v-cloak>
+      <input type="checkbox" class="checkbox" v-model="task.checked">
+      <label for="checkbox">{{ task.text }}</label>
+      <button class="delete" v-on:click="removeTask(task)">X</button>
+    </li>
+  </ul>
+
+  <pre>{{ $data }}</pre>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+<script src="app.js"></script>
+
 </body>
 </html>
