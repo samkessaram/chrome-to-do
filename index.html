@@ -9,24 +9,21 @@
 <div class="container" id="todo">
   <section class="panel">
     <input id="mark-all" type="checkbox" v-bind:checked="areAllSelected" v-on:click="selectAll">
-    <input type="text" placeholder="What do you need to do?" class="text-input" autofocus autofocus v-model="newTask" v-on:keyup.enter="addTask">
+    <input type="text" placeholder="What do you need to do?" class="text-input" autofocus v-model="todo" v-on:keyup.enter="addTask">
     <button v-on:click="clearList">Clear List</button>
     
   </section>
 
   <ul class="list">
-    <li v-for="task in taskList" v-bind:class="{done: task.checked}" v-cloak>
-      <input type="checkbox" class="checkbox" v-model="task.checked">
-      <label for="checkbox">{{ task.text }}</label>
-      <button class="delete" v-on:click="removeTask(task)">X</button>
+    <li v-for="todo in todos" v-bind:class="{done: todo.checked}" v-cloak>
+      <input type="checkbox" class="checkbox" v-model="todo.checked">
+      <label for="checkbox">{{ todo.text }}</label>
+      <button class="delete" v-on:click="removeTask(todo)">X</button>
     </li>
   </ul>
-
-  <pre>{{ $data }}</pre>
 </div>
-
 <script src="js/vue.js"></script>
+<script src="js/store.js"></script>
 <script src="js/app.js"></script>
-
 </body>
 </html>

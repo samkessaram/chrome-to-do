@@ -1,44 +1,50 @@
-new Vue({
+var data = {
+    todo: "",
+    todos: []
+  }
+
+var vm = new Vue({
   el: "#todo",
 
-  data: {
-    newTask: "",
-    taskList: []
-  },
+  data: data,
 
   methods: {
     addTask: function(){
-      var task = this.newTask.trim();
+      var task = this.todo.trim();
 
       if (task){
-        this.taskList.push({
+        this.todos.push({
           text: task,
           checked: false
         });
-        this.newTask = "";
+        todo.webdb.addTodo(task, 'false')
+        this.todo = "";
       }
     },
     removeTask: function(task){
-      var index = this.taskList.indexOf(task)
-      this.taskList.splice(index,1)
+      var index = this.todos.indexOf(task)
+      this.todos.splice(index,1)
+      todo.webdb.deleteTodo(task.id);
+      console.log(task);
     },
     clearList: function(){
-      this.taskList = []
+      // this.todos = [];
+      todo.webdb.deleteAll();
     },
     selectAll: function(task){
       var trueOrFalse = this.areAllSelected ? false : true
 
-      for( var i = 0; i < this.taskList.length; i++){
-        this.taskList[i].checked = trueOrFalse
+      for( var i = 0; i < this.todos.length; i++){
+        this.todos[i].checked = trueOrFalse
       }
     }
   },
 
   computed: {
     areAllSelected: function(){
-      return this.taskList.every(function(task){
+      return this.todos.every(function(task){
         return task.checked
-      }) && this.taskList.length > 0
+      }) && this.todos.length > 0
     }
   }
 
