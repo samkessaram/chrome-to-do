@@ -17,18 +17,24 @@ var vm = new Vue({
           text: task,
           checked: false
         });
-        todo.webdb.addTodo(task, 'false')
+        todoDB.indexedDB.addTodo(task, 'false')
         this.todo = "";
       }
+    },
+    editTask: function(task){
+      todo.webdb.editTodo(task.text, task.id);
+    },
+    checkTask: function(task){
+      task.checked = !task.checked;
+      todo.webdb.checkTodo(task.checked.toString(),task.id);
     },
     removeTask: function(task){
       var index = this.todos.indexOf(task)
       this.todos.splice(index,1)
       todo.webdb.deleteTodo(task.id);
-      console.log(task);
     },
     clearList: function(){
-      // this.todos = [];
+      this.todos = [];
       todo.webdb.deleteAll();
     },
     selectAll: function(task){

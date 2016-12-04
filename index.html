@@ -16,9 +16,10 @@
 
   <ul class="list">
     <li v-for="todo in todos" v-bind:class="{done: todo.checked}" v-cloak>
-      <input type="checkbox" class="checkbox" v-model="todo.checked">
-      <label for="checkbox">{{ todo.text }}</label>
+      <input type="checkbox" class="checkbox" v-on:click="checkTask(todo)" v-model="todo.checked">
+      <input type="text" contenteditable="true" v-on:keydown.enter.stop.prevent="editTask(todo)" v-model="todo.text"></input>
       <button class="delete" v-on:click="removeTask(todo)">X</button>
+      <pre>{{todo.text}}</pre>
     </li>
   </ul>
 </div>
