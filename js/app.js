@@ -17,7 +17,7 @@ var vm = new Vue({
           text: task,
           checked: false
         });
-        todoDB.indexedDB.addTodo(task, 'false')
+        todoDB.indexedDB.addTodo(task, false)
         this.todo = "";
       }
     },
@@ -31,11 +31,11 @@ var vm = new Vue({
     removeTask: function(task){
       var index = this.todos.indexOf(task)
       this.todos.splice(index,1)
-      todo.webdb.deleteTodo(task.id);
+      deleteTodo(task.key);
     },
     clearList: function(){
       this.todos = [];
-      todo.webdb.deleteAll();
+      deleteAllTodos();
     },
     selectAll: function(task){
       var trueOrFalse = this.areAllSelected ? false : true

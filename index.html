@@ -19,7 +19,7 @@
       <input type="checkbox" class="checkbox" v-on:click="checkTask(todo)" v-model="todo.checked">
       <input type="text" contenteditable="true" v-on:keydown.enter.stop.prevent="editTask(todo)" v-model="todo.text"></input>
       <button class="delete" v-on:click="removeTask(todo)">X</button>
-      <pre>{{todo.text}}</pre>
+      <pre>{{todo.key}}</pre>
     </li>
   </ul>
 </div>
