@@ -22,7 +22,7 @@ var vm = new Vue({
       }
     },
     editTask: function(task){
-      editTodo();
+      editTodo(task);
     },
     checkTask: function(task){
       console.log(task.checked);

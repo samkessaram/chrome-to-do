@@ -135,12 +135,24 @@ function editTodo(task){
 
   var request = store.get(task.key);
 
-  request.oncomplete = function(e){
-    console.log(request)
-  };
+  request.onsuccess = function(){
+    var todo = request.result;
+    todo.text = task.text;
+    console.log(todo);
+
+    var updateChecked = store.put(todo);
+
+    updateChecked.onsuccess = function(){
+      todoDB.indexedDB.getAllTodos();
+    }
+
+    updateChecked.onerror = function(e){
+      console.log('Error updating: ' + e)
+    }
+  }
 
   request.onerror = function(e){
-    console.log('Error adding: ' + error)
+    console.log('Error: ' + e)
   }
 }
 
