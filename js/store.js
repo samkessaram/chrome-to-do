@@ -66,7 +66,7 @@ todoDB.indexedDB.getAllTodos = function(){
         var todo = {
           'key':cursor.key,
           'text':cursor.value.text,
-          'checked':(cursor.value.checked === "true")
+          'checked':(cursor.value.checked)
         }
         data.todos.push(todo);
         cursor.continue();
@@ -100,7 +100,49 @@ function deleteAllTodos(){
   var request = store.clear();
 }
 
+function checkTodo(task){
+  var db = todoDB.indexedDB.db;
+  var trans = db.transaction('todo','readwrite');
+  var store = trans.objectStore('todo');
 
+  var request = store.get(task.key);
+
+  request.onsuccess = function(){
+    var todo = request.result;
+    todo.checked = task.checked;
+    console.log(todo);
+
+    var updateChecked = store.put(todo);
+
+    updateChecked.onsuccess = function(){
+      todoDB.indexedDB.getAllTodos();
+    }
+
+    updateChecked.onerror = function(e){
+      console.log('Error updating: ' + e)
+    }
+  }
+
+  request.onerror = function(e){
+    console.log('Error: ' + e)
+  }
+}
+
+function editTodo(task){
+  var db = todoDB.indexedDB.db;
+  var trans = db.transaction('todo','readwrite');
+  var store = trans.objectStore('todo');
+
+  var request = store.get(task.key);
+
+  request.oncomplete = function(e){
+    console.log(request)
+  };
+
+  request.onerror = function(e){
+    console.log('Error adding: ' + error)
+  }
+}
 
 init();
 

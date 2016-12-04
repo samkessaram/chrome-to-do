@@ -22,11 +22,14 @@ var vm = new Vue({
       }
     },
     editTask: function(task){
-      todo.webdb.editTodo(task.text, task.id);
+      editTodo();
     },
     checkTask: function(task){
+      console.log(task.checked);
       task.checked = !task.checked;
-      todo.webdb.checkTodo(task.checked.toString(),task.id);
+      console.log(task);
+      console.log(task.checked);
+      checkTodo(task);
     },
     removeTask: function(task){
       var index = this.todos.indexOf(task)
@@ -37,11 +40,12 @@ var vm = new Vue({
       this.todos = [];
       deleteAllTodos();
     },
-    selectAll: function(task){
+    selectAll: function(){
       var trueOrFalse = this.areAllSelected ? false : true
 
       for( var i = 0; i < this.todos.length; i++){
         this.todos[i].checked = trueOrFalse
+        this.checkTask(this.todos[i])
       }
     }
   },
