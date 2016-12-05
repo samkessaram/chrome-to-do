@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Codelab",
+  "name": "To-Do",
   "version": "1",
   "icons": {
-    "128": "icon_128.png"
+    "128": "check.png"
   },
   "permissions":["storage"],
   "app":{
