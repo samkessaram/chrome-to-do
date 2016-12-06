@@ -13,7 +13,6 @@
     <button v-on:click="clearList">Clear List</button>
     
   </section>
-
   <ul class="list">
     <li v-for="todo in todos" v-bind:class="{done: todo.checked}" v-cloak>
       <input type="checkbox" class="checkbox" v-on:click="checkTask(todo)" v-model="todo.checked">

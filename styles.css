@@ -73,15 +73,8 @@ button {
   background-color: transparent;
   border: 1px solid #3465A4;
   color: #ddd;
-  /* Hide the delete button by default*/
-  visibility: hidden;
   font-size: 20px;
   font-weight: bold;
-}
-
-.list li:hover > .delete {
-  /* Show the delete button when hovering over each list item */
-  visibility: visible;
 }
 
 .list label {

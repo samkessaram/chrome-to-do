@@ -41,8 +41,8 @@ todoDB.indexedDB.addTodo = function(text, checked){
 
   var request = store.put(data);
 
-  request.oncomplete = function(error){
-    todo.indexedDB.getAllTodos();
+  request.onsuccess = function(){
+    todoDB.indexedDB.getAllTodos();
   };
 
   request.onerror = function(error){
@@ -52,14 +52,14 @@ todoDB.indexedDB.addTodo = function(text, checked){
 
 todoDB.indexedDB.getAllTodos = function(){
   var request = window.indexedDB.open('todos');
-  request.onsuccess = function(event){
+  request.onsuccess = function(){
     var db = todoDB.indexedDB.db;
     var trans = db.transaction('todo','readonly');
     var request = trans.objectStore('todo').openCursor();
 
     data.todos = [];
 
-    request.onsuccess = function(event){
+    request.onsuccess = function(){
       var cursor= request.result;
 
       if (cursor){
@@ -82,12 +82,12 @@ function deleteTodo(key){
 
   var request = store.delete(key);
 
-  trans.oncomplete = function(e){
+  trans.oncomplete = function(){
     todoDB.indexedDB.getAllTodos();
   };
 
   request.onError = function(e){
-    console.log('Error adding: ', e);
+    console.log('Error: ' + e);
   };
 };
 
@@ -98,6 +98,14 @@ function deleteAllTodos(){
   var store = trans.objectStore('todo');
 
   var request = store.clear();
+
+  request.onsuccess = function(){
+    todoDB.indexedDB.getAllTodos();
+  }
+
+  request.onerror = function(e){
+    console.log('Error: ' + e);
+  }
 }
 
 function checkTodo(task){
@@ -110,7 +118,6 @@ function checkTodo(task){
   request.onsuccess = function(){
     var todo = request.result;
     todo.checked = task.checked;
-    console.log(todo);
 
     var updateChecked = store.put(todo);
 
@@ -128,6 +135,38 @@ function checkTodo(task){
   }
 }
 
+function checkAllTodos(){
+    var request = window.indexedDB.open('todos');
+    request.onsuccess = function(){
+    var db = todoDB.indexedDB.db;
+    var trans = db.transaction('todo','readwrite');
+    var store = trans.objectStore('todo');
+    var request = store.openCursor();
+    var checked = !vm.areAllSelected;
+
+    request.onsuccess = function(){
+      var cursor = request.result;
+
+      if (cursor){
+        var todo = cursor.value
+        todo.checked = checked;
+
+        var updateTodo = store.put(todo);
+
+        updateTodo.onsuccess = function(){
+          cursor.continue();
+        }
+
+        updateTodo.onerror = function(e){
+          console.log('Error updating: ' + e)
+        }
+      }
+    }
+
+    todoDB.indexedDB.getAllTodos();
+  }
+}
+
 function editTodo(task){
   var db = todoDB.indexedDB.db;
   var trans = db.transaction('todo','readwrite');
@@ -140,13 +179,13 @@ function editTodo(task){
     todo.text = task.text;
     console.log(todo);
 
-    var updateChecked = store.put(todo);
+    var updateTodo = store.put(todo);
 
-    updateChecked.onsuccess = function(){
+    updateTodo.onsuccess = function(){
       todoDB.indexedDB.getAllTodos();
     }
 
-    updateChecked.onerror = function(e){
+    updateTodo.onerror = function(e){
       console.log('Error updating: ' + e)
     }
   }
