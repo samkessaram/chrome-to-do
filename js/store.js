@@ -135,33 +135,33 @@ function checkTodo(task){
   }
 }
 
-function checkAllTodos(){
+function checkAllTodos(thisVue){
     var request = window.indexedDB.open('todos');
     request.onsuccess = function(){
-    var db = todoDB.indexedDB.db;
-    var trans = db.transaction('todo','readwrite');
-    var store = trans.objectStore('todo');
-    var request = store.openCursor();
-    var checked = !vm.areAllSelected;
+      var db = todoDB.indexedDB.db;
+      var trans = db.transaction('todo','readwrite');
+      var store = trans.objectStore('todo');
+      var request = store.openCursor();
+      var checked = !areAllSelected(thisVue);
 
-    request.onsuccess = function(){
-      var cursor = request.result;
+      request.onsuccess = function(){
+        var cursor = request.result;
 
-      if (cursor){
-        var todo = cursor.value
-        todo.checked = checked;
+        if (cursor){
+          var todo = cursor.value
+          todo.checked = checked;
 
-        var updateTodo = store.put(todo);
+          var updateTodo = store.put(todo);
 
-        updateTodo.onsuccess = function(){
-          cursor.continue();
-        }
+          updateTodo.onsuccess = function(){
+            cursor.continue();
+          }
 
-        updateTodo.onerror = function(e){
-          console.log('Error updating: ' + e)
+          updateTodo.onerror = function(e){
+            console.log('Error updating: ' + e)
+          }
         }
       }
-    }
 
     todoDB.indexedDB.getAllTodos();
   }

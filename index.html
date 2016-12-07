@@ -2,25 +2,42 @@
 <html>
 <head>
   <title>To-Do with Vue</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/foundation-custom/css/foundation.min.css">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
 
 <div class="container" id="todo">
-  <section class="panel">
-    <input id="mark-all" type="checkbox" v-bind:checked="areAllSelected" v-on:click="selectAll">
-    <input type="text" placeholder="What do you need to do?" class="text-input" autofocus v-model="todo" v-on:keyup.enter="addTask">
-    <button v-on:click="clearList">Clear List</button>
-    
-  </section>
+<div class="row">
+    <div class="small-1 columns">
+    <!-- <input type="checkbox" v-bind:checked="areAllSelected" v-on:click="selectAll"> -->
+    <i class="fa" v-bind:class="classObject" v-on:click="selectAll"></i>
+    </div>
+    <div class="small-9 columns">
+    <input type="text" placeholder="What do you need to do?" autofocus v-model="todo" v-on:keyup.enter="addTask">
+    </div>
+    <div class="small-2 columns">
+    <button class="button" v-on:click="clearList" title="Delete All Tasks"><i class="fa fa-times-circle"></i></button>
+    </div>
+</div>    
+
   <ul class="list">
     <li v-for="todo in todos" v-bind:class="{done: todo.checked}" v-cloak>
-      <input type="checkbox" class="checkbox" v-on:click="checkTask(todo)" v-model="todo.checked">
+    <div class="row">
+    <div class="small-1 columns">
+      <input type="checkbox" v-on:click="checkTask(todo)" v-model="todo.checked">
+    </div>
+    <div class="small-9 columns">
       <input type="text" contenteditable="true" v-on:keydown.enter.stop.prevent="editTask(todo)" v-model="todo.text"></input>
-      <button class="delete" v-on:click="removeTask(todo)">X</button>
-      <pre>{{todo.key}}</pre>
+    </div>
+    <div class="small-2 columns">
+      <button v-on:click="removeTask(todo)"><i class="fa fa-times"></i></button>
+    </div>
+      </div>
     </li>
   </ul>
+
 </div>
 <script src="js/vue.js"></script>
 <script src="js/store.js"></script>

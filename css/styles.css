@@ -1,0 +1,12 @@
+[v-cloak] {
+  display: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+#todo {
+  position: relative;
+  top: 100px;
+}
