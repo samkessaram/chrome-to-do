@@ -57,7 +57,7 @@ todoDB.indexedDB.getAllTodos = function(){
     var trans = db.transaction('todo','readonly');
     var request = trans.objectStore('todo').openCursor();
 
-    data.todos = [];
+    allTodos = [];
 
     request.onsuccess = function(){
       var cursor= request.result;
@@ -68,22 +68,24 @@ todoDB.indexedDB.getAllTodos = function(){
           'text':cursor.value.text,
           'checked':(cursor.value.checked)
         }
-        data.todos.push(todo);
+        allTodos.push(todo);
         cursor.continue();
       }
+
+      data.todos = allTodos;
     }
   }
 }
 
-function deleteTodo(key){
+function deleteTodo(task, arr){
   var db = todoDB.indexedDB.db;
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
 
-  var request = store.delete(key);
+  var request = store.delete(task.key);
 
   trans.oncomplete = function(){
-    todoDB.indexedDB.getAllTodos();
+    arr.splice(arr.indexOf(task),1)
   };
 
   request.onError = function(e){
@@ -117,7 +119,7 @@ function checkTodo(task){
 
   request.onsuccess = function(){
     var todo = request.result;
-    todo.checked = task.checked;
+    todo.checked = !task.checked;
 
     var updateChecked = store.put(todo);
 
@@ -167,7 +169,7 @@ function checkAllTodos(thisVue){
   }
 }
 
-function editTodo(task){
+function editTodo(task,element){
   var db = todoDB.indexedDB.db;
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
@@ -177,16 +179,17 @@ function editTodo(task){
   request.onsuccess = function(){
     var todo = request.result;
     todo.text = task.text;
-    console.log(todo);
 
     var updateTodo = store.put(todo);
 
     updateTodo.onsuccess = function(){
-      todoDB.indexedDB.getAllTodos();
+      element.blur();
     }
 
     updateTodo.onerror = function(e){
-      console.log('Error updating: ' + e)
+      console.log('Error updating: ' + e);
+      alert('Error updating: ' + e);
+      todoDB.indexedDB.getAllTodos();
     }
   }
 

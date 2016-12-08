@@ -1,6 +1,6 @@
 var data = {
     todo: "",
-    todos: [],
+    todos: []
   }
 
 var vm = new Vue({
@@ -17,18 +17,17 @@ var vm = new Vue({
         this.todo = "";
       }
     },
-    editTask: function(task){
-      editTodo(task);
+    editTask: function(task, element){
+      editTodo(task, element);
     },
     checkTask: function(task){
       checkTodo(task);
     },
     removeTask: function(task){
-      deleteTodo(task.key);
+      deleteTodo(task,data.todos);
     },
     clearList: function(){
-      var confirm = window.confirm('Are you sure you want to delete all tasks?')
-      if ( confirm === true ){
+      if ( window.confirm('Are you sure you want to delete all tasks?') === true ){
         deleteAllTodos();
       }
     },
@@ -40,8 +39,8 @@ var vm = new Vue({
   computed: {
     classObject: function(){
       return {
-        'fa-square': !areAllSelected(this),
-        'fa-check-square': areAllSelected(this)
+        'fa-square-o': !areAllSelected(this),
+        'fa-check-square-o': areAllSelected(this)
       }
     }
   }
