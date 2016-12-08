@@ -33,16 +33,16 @@ todoDB.indexedDB.addTodo = function(text, checked){
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
 
-  var data = {
+  var todoData = {
     'text':text,
     'checked': checked,
     'timeStamp': new Date().getTime()
   };
 
-  var request = store.put(data);
+  var request = store.put(todoData);
 
   request.onsuccess = function(){
-    todoDB.indexedDB.getAllTodos();
+    data.todos.push(todoData);
   };
 
   request.onerror = function(error){
@@ -82,7 +82,7 @@ function deleteTodo(task, arr){
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
 
-  var request = store.delete(task.key);
+  var request = store.delete(task.key || task.timeStamp);
 
   trans.oncomplete = function(){
     arr.splice(arr.indexOf(task),1)
@@ -115,7 +115,7 @@ function checkTodo(task){
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
 
-  var request = store.get(task.key);
+  var request = store.get(task.key || task.timeStamp);
 
   request.onsuccess = function(){
     var todo = request.result;
@@ -124,7 +124,7 @@ function checkTodo(task){
     var updateChecked = store.put(todo);
 
     updateChecked.onsuccess = function(){
-      todoDB.indexedDB.getAllTodos();
+      task.checked = !task.checked;
     }
 
     updateChecked.onerror = function(e){
@@ -156,7 +156,7 @@ function checkAllTodos(thisVue){
           var updateTodo = store.put(todo);
 
           updateTodo.onsuccess = function(){
-            cursor.continue();
+            cursor.continue()
           }
 
           updateTodo.onerror = function(e){
@@ -165,7 +165,9 @@ function checkAllTodos(thisVue){
         }
       }
 
-    todoDB.indexedDB.getAllTodos();
+      for (var i = 0; i < data.todos.length; i++){
+        data.todos[i].checked = checked;
+      }
   }
 }
 
@@ -174,7 +176,7 @@ function editTodo(task,element){
   var trans = db.transaction('todo','readwrite');
   var store = trans.objectStore('todo');
 
-  var request = store.get(task.key);
+  var request = store.get(task.key || task.timeStamp);
 
   request.onsuccess = function(){
     var todo = request.result;
