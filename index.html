@@ -31,7 +31,7 @@
           <i class="fa" v-bind:class="[todo.checked ? 'fa-check-square-o' : 'fa-square-o' ]" v-on:click="checkTask(todo)"></i>
         </div>
         <div class="small-6 columns">
-          <input type="text" v-on:keyup.enter.prevent="editTask(todo,$event.srcElement)" v-model="todo.text" v-bind:class="{checked: todo.checked}"></input>
+          <textarea type="text" v-on:keydown.enter.prevent="editTask(todo,$event.srcElement)" v-model="todo.text" v-bind:class="{checked: todo.checked}"></textarea>
         </div>
         <div class="small-3 columns text-left">
           <i class="fa fa-times remove" v-on:click="removeTask(todo)"></i>
