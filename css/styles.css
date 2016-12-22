@@ -2,6 +2,11 @@
   display: none;
 }
 
+.fa-check-square-o {
+  position: relative;
+  left: 3px;
+}
+
 h1 {
   font-weight: 100;
   margin-bottom: 20px;
